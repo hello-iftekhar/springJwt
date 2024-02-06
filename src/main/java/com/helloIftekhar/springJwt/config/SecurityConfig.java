@@ -26,12 +26,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final CustomAccessDeniedHandler accessDeniedHandler;
-
-    public SecurityConfig(UserDetailsServiceImp userDetailsServiceImp, JwtAuthenticationFilter jwtAuthenticationFilter, CustomAccessDeniedHandler accessDeniedHandler) {
+    public SecurityConfig(UserDetailsServiceImp userDetailsServiceImp, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsServiceImp = userDetailsServiceImp;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.accessDeniedHandler = accessDeniedHandler;
     }
 
     @Bean
@@ -49,7 +46,10 @@ public class SecurityConfig {
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e->e.accessDeniedHandler(accessDeniedHandler)
+                .exceptionHandling(
+                        e->e.accessDeniedHandler(
+                                (request, response, accessDeniedException)->response.setStatus(403)
+                        )
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .build();
 
