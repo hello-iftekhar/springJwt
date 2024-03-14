@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/spring_jwt
-    username: root
-    password: mypassword
+    url: jdbc:mysql://localhost:3306/JWTUser
+    username: JWTUser
+    password: JWTPassword
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
